@@ -6,18 +6,18 @@
 #   dir2
 #   dir3
 #       dir4
-mkdir /task
-mkdir ./dir1 ./dir2 ./dir3
+mkdir -p /task/task
+mkdir dir1 dir2 dir3
 mkdir ./dir3/dir4
 # изменяем текущую директорию на task
-cd /task
+cd /task/task
 # создаём пустой файл task/dir2/empty
 touch ./dir2/empty
 # создаём файл task/dir2/hello.sh с таким содержанием:
 # #!/bin/bash
 # echo "$1, привет!"
 echo '#!/bin/bash
->echo "$1, привет!"' > ./dir2/hello.sh
+echo "$1, привет!"' > dir2/hello.sh
 # устанавливаем для task/dir2/hello.sh права rwxrw-r--
 chmod -v 764 hello.sh
 # сохраняем список файлов task/dir2 в task/dir2/list.txt
@@ -26,22 +26,24 @@ ls dir2 > ./dir2/list.txt
 cp ./dir2/* ./dir3/dir4
 # записываем в task/dir1/summary.txt список файлов с расширением *.txt
 # находящихся в task, включая поддиректории
-find /task -name "*.txt" > ./dir1/summary.txt
+find ./task -name "*.txt" > ./dir1/summary.txt
 # дописываем в task/dir1/summary.txt содержимое task/dir2/list.txt
 cat ./dir2/list.txt >> ./dir1/summary.txt
 # определяем переменную окружения NAME со значением "Всем студентам"
-NAMEVAR='Всем студентам'
+# bash не давал использовать переменную NAME, пришлось NAMEVAR прописать
+NAME='Всем студентам'
 # запускаем task/dir2/hello.sh с переменной окружения NAME в качестве аргумента
 # вывод скрипта должен дописаться в файл task/dir1/summary.txt
-./dir2/hello.sh "$NAMEVAR" >> ./dir1/summary.txt
+./dir2/hello.sh "$NAME" >> ./dir1/summary.txt
 # перемещаем с переименованием task/dir1/summary.txt в task/Практическое задание
-mv ./dir1/summary.txt ./Practice
+# Кодировка не работает, поэтому сори за англицизмы
+mv ./dir1/summary.txt ./Практическое задание
 # выводим на консоль содержимое файла task/Практическое задание
-cat ./Practice
+cat ./Практическое задание
 # ищем в файле "Практическое задание" строки, которые содержат слово "dir"
 # и затем отсортировываем их
-grep -n "dir" ./Practice
+grep -n "dir" ./Практическое задание | sort -r
 # меняем текущую директорию на родительскую для task
-cd
+cd /task
 # удаляем директорию task со всем содержимым
 rm -r /task
